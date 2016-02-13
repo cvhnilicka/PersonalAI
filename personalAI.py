@@ -73,6 +73,7 @@ def stoned():
 
 def findLocation():
 	response = requests.get('https://maps.googleapis.com/maps/api/geocode/json?address=3+N+Randall,+Madison,+CA')
+	print(response)
 	resp_json_payload = response.json()
 	lat = resp_json_payload['results'][0]['geometry']['location']['lat']
 	lng = resp_json_payload['results'][0]['geometry']['location']['lng']
