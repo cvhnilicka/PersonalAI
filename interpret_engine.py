@@ -4,7 +4,8 @@ import json
 import difflib
 
 
-
+#User Input vs Accepted objects(keys)
+#Returns array of Input words that match certain keys
 def interpret1( arr1, arr2):
 	print(arr1) #INPUT	
 	print(arr2) #Keys
@@ -12,12 +13,13 @@ def interpret1( arr1, arr2):
 	for i in arr1:
 		for x in arr2:
 			diff = difflib.SequenceMatcher(None, i, x).ratio()
-			print(diff)
+			#print(diff)
 			if difflib.SequenceMatcher(None, i, x).ratio() > .85:
 				resp.append(x)	
 	return resp
 
 
+#Global Commands vs Accepted Input 
 def interpret2(arr1, arr2):
 	arr3 = interpret1(arr1, arr2)
 	set1 = set(arr3)
