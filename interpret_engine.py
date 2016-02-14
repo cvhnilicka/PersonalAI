@@ -6,8 +6,8 @@ import difflib
 
 
 def interpret1( arr1, arr2):
-	print(arr1)
-	print(arr2)
+	print(arr1) #INPUT	
+	print(arr2) #Keys
 	resp = []
 	for i in arr1:
 		for x in arr2:
@@ -26,8 +26,8 @@ def interpret2(arr1, arr2):
 	return list(set3)
 
 inputs = ["subway", "hour", "butter", "pen", "temp", "ratings"]
-subject = ["subway", "Tony's bistro", "Pizza"]
-cmds  = ["hour", "rating", "temp"]
+subject = ["subway", "Tony's bistro", "Pizza"]                   #objects 
+cmds  = ["hour", "rating", "temp"]				 #all accepted commands
 
 
 
