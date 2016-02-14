@@ -13,7 +13,7 @@
 
 
 
-#import Restaurant
+import Restaurant
 
 class ObjectNode(object):
     def __init__(self, name, module):
@@ -70,25 +70,18 @@ class Tree(object):
 	def __init__(self):
 		self.head = RootNode
 
-		def	createTree(self, modulearr, cmdarr):
+		def	createTree(self, modulearr, cmdarr, objarr):
 			for i in modulearr:
-				self.head.addModule(i)
-				
-
-		def addCmds(self, cmdarr):
-			for w in cmdarr:
-				for i in self.head.modules:
-					for x in Restaurant.commands:
-						if 	x == w:
-							i.addCmd(x)
-
-		def addObjs(self, objarr, objs):
-			for w in objarr:
-				for i in head.modules:
-					for x in ojbs:
-						if 	x == w:
-							i.addCmd(x)
-		
+				self.head.addModule(i, cmdarr, objarr)
+					
+		def dfs(string):
+	 		visited, stack = set(), [self.head]
+			while stack:
+				vertex = stack.pop()
+				if vertex not in visited:
+					visited.add(vertex)
+					stack.extend(self.head[vertex] - visited)
+			return visited
 
 arrb = Restaurant.commands
 print(arrb)
