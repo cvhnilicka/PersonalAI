@@ -49,27 +49,29 @@ class RootNode(object):
 					return i
 
 class Tree(object):
-	
-	def	createTree(self, modulearr, cmdarr):
-		head = RootNode
-		for i in modulearr:
-			head.addModule(i)
+	def __init__(self):
+		self.head = RootNode
 
-	def addCmds(head, cmdarr):
-		for w in cmdarr:
-			for i in head.modules:
-				for x in Restaurant.commands:
-					if 	x == w:
-						i.addCmd(x)
+		def	createTree(self, modulearr, cmdarr):
+			for i in modulearr:
+				self.head.addModule(i)
+				
 
-	def addObjs(head, objarr, objs):
-		for w in objarr:
-			for i in head.modules:
-				for x in ojbs:
-					if 	x == w:
-						i.addCmd(x)
+		def addCmds(self, cmdarr):
+			for w in cmdarr:
+				for i in self.head.modules:
+					for x in Restaurant.commands:
+						if 	x == w:
+							i.addCmd(x)
 
-	
+		def addObjs(self, objarr, objs):
+			for w in objarr:
+				for i in head.modules:
+					for x in ojbs:
+						if 	x == w:
+							i.addCmd(x)
+		
+
 arrb = Restaurant.commands
 print(arrb)
 	
