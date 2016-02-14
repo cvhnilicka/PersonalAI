@@ -1,0 +1,20 @@
+%Restaurant
+$hour
+$price
+$open
+$rating
+$name
+#Subway
+#Tony's Bistro
+#Pizza Hut
+%Location
+$latitude
+$longitude
+$near me
+$where
+#latitude
+#logitude
+%Search
+$look
+$up
+$search
