@@ -51,7 +51,7 @@ class RootNode(object):
 	def __init__(self):
 		self.modules = []
 		
-		def addModule(self, moduleName, cmdarr, objarr): # CHANGED PARAMETERS HERE
+		def addModule(self, moduleName, cmdarr, objarr):
 			newMod = ModuleNode(moduleName)
 			for i in cmdarr:
 				addCmd(i)                       #Fills the module node's commands array 
