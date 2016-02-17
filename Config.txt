@@ -18,3 +18,5 @@ $where
 $look
 $up
 $search
+%Work
+%Reminders

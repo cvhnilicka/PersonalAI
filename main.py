@@ -2,6 +2,8 @@
 #
 #
 import fileinput
+import db
+
 class MOD(object):
 	def __init__(self, name):
 		self.name = name
@@ -32,11 +34,16 @@ def main():
 	# Just for seeing the output sorted modules and their corresponding commands and objects
 	# We may have to cut the new line characters out in each obj and cmd list but not sure if that is needed yet
 	#
-	print '\n'
-	for i in modules:
-		print i.name
-		print i.objs
-		print i.cmds
-		print '\n'		
+
+	tree = db.Tree()
+
+	tree.createTree(modules)
+	tree.printTree()
+#	print '\n'
+#	for i in modules:
+#		print i.name
+#		print i.objs
+#		print i.cmds
+#		print '\n'		
 
 if __name__ == "__main__": main()
