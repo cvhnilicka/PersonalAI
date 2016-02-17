@@ -10,6 +10,7 @@ class MOD(object):
 		self.objs = []
 		self.cmds = []
 
+
 def main():
 	#Array of MOD Objects
 	modules = []
@@ -39,11 +40,6 @@ def main():
 
 	tree.createTree(modules)
 	tree.printTree()
-#	print '\n'
-#	for i in modules:
-#		print i.name
-#		print i.objs
-#		print i.cmds
-#		print '\n'		
 
+	tree.searchTree("where")
 if __name__ == "__main__": main()

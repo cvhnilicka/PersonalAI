@@ -14,6 +14,7 @@
 
 
 import Restaurant
+import difflib
 
 class ObjectNode(object):
 	def __init__(self, name, module):
@@ -27,11 +28,16 @@ class ObjectNode(object):
 
 	def checkValidity(self, namestring):
 		for i in self.validarr:
-			if i == namestring:
-				i.ojbname = namestring
+			if difflib.SequenceMatcher(None, i, namestring).ratio() > .80:
+				self.objname = namestring
+	
 				return self
+		return -1
 
-
+	def printNode(self):
+		print self.module
+		print self.name
+		print self.objname
 
 class ModuleNode(object):
 	def __init__(self, name):
@@ -46,8 +52,12 @@ class ModuleNode(object):
 			self.objects.addToArray(objtoadd)
 
 	def search(self, string):
-			self.commands.checkValidity(string)
-			self.objects.checkValidity(string)
+			ret1 = self.commands.checkValidity(string)
+			ret2 = self.objects.checkValidity(string)
+			if ret1 != -1:
+				return ret1
+			if ret2 != -1:
+				return ret2
 
 	def printObjs(self):
 		for i in self.commands.validarr:
@@ -80,7 +90,7 @@ class Tree(object):
 	
 
 	def	createTree(self, modulearr):
-		modulearr.sort()
+		modulearr.sort(key = lambda x: x.name)
 				
 		for i in modulearr:
 			self.head.addModule(i.name, i.cmds, i.objs)
@@ -96,15 +106,15 @@ class Tree(object):
 			modules_to_search = self.head.modules[:len(self.head.modules)/2]
 		else:
 			print("not a valid string")
-		for i in modules_to_search:
-			i.search(string)
-		print(modules_to_search)
+		
+		for i in self.head.modules:
+			found = i.search(string)
+			if found != None:
+				break
+		found.printNode()
 
 	def printTree(self):
 		print "ROOT"
 		for i in self.head.modules:
 			print "|-", i.name
 			i.printObjs()
-
-a = Tree()
-a.searchTree("subway")
