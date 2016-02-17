@@ -91,7 +91,8 @@ class Tree(object):
 			modules_to_search = self.head.modules[:len(self.head.modules)/2]
 		else:
 			print("not a valid string")
-
+		for i in modules_to_search:
+			i.search(string)
 		print(modules_to_search)
 a = Tree()
 a.searchTree("r")
