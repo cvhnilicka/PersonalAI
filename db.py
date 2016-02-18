@@ -2,22 +2,12 @@
 import difflib
 
 class ObjectNode(object):
-	def __init__(self, typ, module):
+	def __init__(self, typ, module, value):
 		self.module = module
 		self.typ = typ
 		self.validarr = []	#We could maybe think of new way to create tree. IMO, right now an ObjectNode is carrying too much baggage for its purpose. Ideally, we want the Object node to hold a value for a certian subject or command, as well as its corresponding module. But right now, the objectNode is also carrying a large array of commands or subjects.If we remove the array from the object node and instead create an array of commands and subjects for a moduleNode, we wouldn't have to return a list of large objectNodes with large arrays in searchTree(). That way, each valid command that we find and use in the main will be much lighter. Let me know what you think.    
-		self.valueStr = ""
+		self.valueStr = value
 
-  	def addToArray(self, name):
-		self.validarr.append(name)
-
-	def checkValidity(self, namestring):
-		for i in self.validarr:
-			if difflib.SequenceMatcher(None, i, namestring).ratio() > .80:
-				self.valueStr = namestring
-	
-				return self
-		return -1
 
 	def printNode(self):
 		print self.module
@@ -27,28 +17,32 @@ class ObjectNode(object):
 class ModuleNode(object):
 	def __init__(self, name):
 		self.name = name
-		self.commands = ObjectNode("CMD", name) #Could change this into a list of Object nodes instead of each object node holding an array
-		self.subjects = ObjectNode("SBJ", name)
-	
+		self.commands = [] #Could change this into a list of Object nodes instead of each object node holding an array
+		self.subjects = []
+		###### CHANGED #############
 	def addCmd(self, cmd_add):
-			self.commands.addToArray(cmd_add) #replace addToArray with append 
-		
+		newN = ObjectNode("CMD", self.name, cmd_add)	
+		self.commands.append(newN) #replace addToArray with append 
+		######### CHANGED ################	
 	def addSbj(self, subject_add):
-			self.subjects.addToArray(subject_add)#same here
-
+		newN = ObjectNode("OBJ", self.name, subject_add)	
+		self.subjects.append(newN)#same here
+		########### CHANGED ###############
 	def search(self, string):
-			chk_cmds = self.commands.checkValidity(string) #Would have to do some traversal here but not to big of a deal
-			chk_subj = self.subjects.checkValidity(string)
-			if chk_cmds != -1:
-				return chk_cmds
-			if chk_subj != -1:
-				return chk_subj
+			for i in self.commands:
+				if i.valueStr == string:
+					return i
+			for j in self.subjects:
+				if j.valueStr == string:
+					return j
 
 	def printObjs(self):
-		for i in self.commands.validarr: #Just traverse through each list instead of each ObjectNode's list
-			print "--|-- CMD: --", i
-		for x in self.subjects.validarr:
-			print "--|-- OBJ: --", x
+		for i in self.commands: 
+			print "--|-- CMD: --"
+			i.printNode()
+		for x in self.subjects:
+			print "--|-- OBJ: --"
+			x.printNode()
 
 class RootNode(object):
 	def __init__(self):
@@ -63,7 +57,7 @@ class RootNode(object):
 		self.modules.append(newMod)
 			
 	
-	def searchModule(self, moduleName): #Do we use this?
+	def searchModule(self, moduleName): #Do we use this?   # not right now but im sure we will have to in the future....
 		for i in self.modules:
 			if i.name == moduleName:
 				return i
