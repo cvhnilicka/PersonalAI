@@ -98,15 +98,7 @@ class Tree(object):
 	def searchTree(self, string):
 		string.lower()
  		firstChar = string[:1]
-		charAscii = ord(firstChar)
-		modules_to_search = []
-		if 110 <= charAscii < 123:
-			modules_to_search = self.head.modules[len(self.head.modules)/2:]
-		elif 97 <= charAscii < 110:
-			modules_to_search = self.head.modules[:len(self.head.modules)/2]
-		else:
-			print("not a valid string")
-		
+	
 		for i in self.head.modules:
 			found = i.search(string)
 			if found != None:

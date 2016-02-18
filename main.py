@@ -19,6 +19,7 @@ def main():
 	modName = ""        
 	for line in fileinput.input("Config.txt"):
 		#Modules
+		line = line.lower()
 		if line[0] == '%':	 
 			modName = line[1:]
 			newMod = MOD(modName)
@@ -41,17 +42,50 @@ def main():
 
 	tree.createTree(modules)
 	tree.printTree()
-
-	userInput(tree)
-
-
+	loop = True
+	while loop:
+		cmds = userInput(tree)
+		cross = validate(cmds)
+		for x in cross:
+			x.printNode()
+			for k in cross[x]:
+				k.printNode()
 
 def userInput(tree):
 	cmd = raw_input()
 	cmd = cmd.split(" ")
+	valid_cmds = []
 	for i in cmd:
 		found = tree.searchTree(i)
 		if found != None:
-			found.printNode()
+			valid_cmds.append(found)
+	return valid_cmds
+
+
+
+def validate(arr):
+	cmds = []
+	objs = []
+	valid = {}
+	for i in arr:
+		if i.name == "CMD":
+			cmds.append(i)
+		elif i.name == "OBJ":
+			objs.append(i)
+	for x in objs:
+		for j in cmds:
+			a = []
+			if x.module == j.module:
+				
+				a.append(j)
+		valid[x] = a
+
+	return valid
+		
+			
+
+
+		
+
 
 if __name__ == "__main__": main()

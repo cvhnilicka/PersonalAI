@@ -20,3 +20,5 @@ $up
 $search
 %Work
 %Reminders
+%Exit
+$exit
