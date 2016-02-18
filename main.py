@@ -3,6 +3,7 @@
 #
 import fileinput
 import db
+import readline
 
 class MOD(object):
 	def __init__(self, name):
@@ -41,5 +42,16 @@ def main():
 	tree.createTree(modules)
 	tree.printTree()
 
-	tree.searchTree("where")
+	userInput(tree)
+
+
+
+def userInput(tree):
+	cmd = raw_input()
+	cmd = cmd.split(" ")
+	for i in cmd:
+		found = tree.searchTree(i)
+		if found != None:
+			found.printNode()
+
 if __name__ == "__main__": main()

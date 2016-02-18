@@ -111,8 +111,8 @@ class Tree(object):
 			found = i.search(string)
 			if found != None:
 				break
-		found.printNode()
-
+		return found		
+ 
 	def printTree(self):
 		print "ROOT"
 		for i in self.head.modules:
