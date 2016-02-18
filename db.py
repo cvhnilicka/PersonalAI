@@ -1,27 +1,12 @@
-# ::: CHANGES ::::
-#  
-# I was confused why you were importing Resturants and the commands in the addCmd and addObj defs in
-# Tree class. 
-#
-# In createTree() I added cmdArr and objArr parameters that will be the lists we make from parsing our config file.
-# I also added the same parameters to addModule() so that we can pass those arrays through and add commands and objects to 
-# the module from within the add module function. addObj() and addCmd() then call addToArray() with the correct string values
-# from the cmdArr and objArr 
-# lists that were passes as parameters earlier.  
-#
 
-
-
-
-import Restaurant
 import difflib
 
 class ObjectNode(object):
-	def __init__(self, name, module):
+	def __init__(self, typ, module):
 		self.module = module
-		self.name = name
-		self.validarr = []
-		self.objname = ""
+		self.typ = typ
+		self.validarr = []	#We could maybe think of new way to create tree. IMO, right now an ObjectNode is carrying too much baggage for its purpose. Ideally, we want the Object node to hold a value for a certian subject or command, as well as its corresponding module. But right now, the objectNode is also carrying a large array of commands or subjects.If we remove the array from the object node and instead create an array of commands and subjects for a moduleNode, we wouldn't have to return a list of large objectNodes with large arrays in searchTree(). That way, each valid command that we find and use in the main will be much lighter. Let me know what you think.    
+		self.valueStr = ""
 
   	def addToArray(self, name):
 		self.validarr.append(name)
@@ -29,40 +14,40 @@ class ObjectNode(object):
 	def checkValidity(self, namestring):
 		for i in self.validarr:
 			if difflib.SequenceMatcher(None, i, namestring).ratio() > .80:
-				self.objname = namestring
+				self.valueStr = namestring
 	
 				return self
 		return -1
 
 	def printNode(self):
 		print self.module
-		print self.name
-		print self.objname
+		print self.typ
+		print "Value:", self.valueStr
 
 class ModuleNode(object):
 	def __init__(self, name):
 		self.name = name
-		self.commands = ObjectNode("CMD", name)
-		self.objects = ObjectNode("OBJ", name)
+		self.commands = ObjectNode("CMD", name) #Could change this into a list of Object nodes instead of each object node holding an array
+		self.subjects = ObjectNode("SBJ", name)
 	
-	def addCmd(self, cmdtoadd):
-			self.commands.addToArray(cmdtoadd)
+	def addCmd(self, cmd_add):
+			self.commands.addToArray(cmd_add) #replace addToArray with append 
 		
-	def addObj(self, objtoadd):
-			self.objects.addToArray(objtoadd)
+	def addSbj(self, subject_add):
+			self.subjects.addToArray(subject_add)#same here
 
 	def search(self, string):
-			ret1 = self.commands.checkValidity(string)
-			ret2 = self.objects.checkValidity(string)
-			if ret1 != -1:
-				return ret1
-			if ret2 != -1:
-				return ret2
+			chk_cmds = self.commands.checkValidity(string) #Would have to do some traversal here but not to big of a deal
+			chk_subj = self.subjects.checkValidity(string)
+			if chk_cmds != -1:
+				return chk_cmds
+			if chk_subj != -1:
+				return chk_subj
 
 	def printObjs(self):
-		for i in self.commands.validarr:
+		for i in self.commands.validarr: #Just traverse through each list instead of each ObjectNode's list
 			print "--|-- CMD: --", i
-		for x in self.objects.validarr:
+		for x in self.subjects.validarr:
 			print "--|-- OBJ: --", x
 
 class RootNode(object):
@@ -74,11 +59,11 @@ class RootNode(object):
 		for i in cmdarr:
 			newMod.addCmd(i)                       #Fills the module node's commands array 
 		for j in objarr:			
-			newMod.addObj(j)			#Fills the module node's obj array 		
+			newMod.addSbj(j)			#Fills the module node's obj array 		
 		self.modules.append(newMod)
 			
 	
-	def searchModule(self, moduleName):
+	def searchModule(self, moduleName): #Do we use this?
 		for i in self.modules:
 			if i.name == moduleName:
 				return i
@@ -89,16 +74,15 @@ class Tree(object):
 		self.head = RootNode()
 	
 
-	def	createTree(self, modulearr):
+	def createTree(self, modulearr):
 		modulearr.sort(key = lambda x: x.name)
-				
+		
 		for i in modulearr:
-			self.head.addModule(i.name, i.cmds, i.objs)
+			self.head.addModule(i.name, i.cmds, i.subjs)
 					
 	def searchTree(self, string):
-		string.lower()
- 		firstChar = string[:1]
-	
+		string.lower()		
+
 		for i in self.head.modules:
 			found = i.search(string)
 			if found != None:

@@ -8,9 +8,8 @@ import readline
 class MOD(object):
 	def __init__(self, name):
 		self.name = name
-		self.objs = []
+		self.subjs = []
 		self.cmds = []
-
 
 def main():
 	#Array of MOD Objects
@@ -21,7 +20,7 @@ def main():
 		#Modules
 		line = line.lower()
 		if line[0] == '%':	 
-			modName = line[1:]
+			modName = line[1:].rstrip('\n')
 			newMod = MOD(modName)
 			modules.append(newMod)
 		#Commands
@@ -31,61 +30,62 @@ def main():
 		#Objects
 		if line[0] == '#':
 			indx = modules.index(newMod)
-			modules[indx].objs.append(line[1:])
+			modules[indx].subjs.append(line[1:])
 				
-	#
-	# Just for seeing the output sorted modules and their corresponding commands and objects
-	# We may have to cut the new line characters out in each obj and cmd list but not sure if that is needed yet
-	#
-
+	#Database creation from config
 	tree = db.Tree()
-
 	tree.createTree(modules)
 	tree.printTree()
-	loop = True
-	while loop:
+	
+	#Main program flow -- Module executions will be called in here 
+	while True:
 		cmds = userInput(tree)
-		cross = validate(cmds)
-		for x in cross:
-			x.printNode()
-			for k in cross[x]:
-				k.printNode()
+		crossRef = crossReference(cmds)
+		#TESTING
+		for x in crossRef:
+			print "Subject: ", x.printNode()
+			for k in crossRef[x]:
+				print "Command: ", k.printNode()
+		#END TESTING
+		#CREATE EXECUTION HERE??
+		#
 
+#
+# Recognize user input against DB Values
+#  
 def userInput(tree):
-	cmd = raw_input()
-	cmd = cmd.split(" ")
+	user_cmd = raw_input()
+	user_cmd = user_cmd.split(" ")
 	valid_cmds = []
-	for i in cmd:
+	for i in user_cmd:
 		found = tree.searchTree(i)
 		if found != None:
 			valid_cmds.append(found)
 	return valid_cmds
 
-
-
-def validate(arr):
+#
+# Match valid subjects with their commands
+# Form an execution  
+#
+def crossReference(valid_input):
 	cmds = []
-	objs = []
-	valid = {}
-	for i in arr:
-		if i.name == "CMD":
+	subjs = []
+	execute = {}
+	#Sort valid input into subj/cmd
+	for i in valid_input:
+		if i.typ == "SBJ":
 			cmds.append(i)
-		elif i.name == "OBJ":
-			objs.append(i)
-	for x in objs:
+		elif i.typ == "CMD":
+			subjs.append(i)
+	#Cross Reference
+	for x in subjs:
 		for j in cmds:
 			a = []
-			if x.module == j.module:
-				
+			if j.module == x.module:
 				a.append(j)
-		valid[x] = a
-
-	return valid
+		execute[x] = a
+	
+	return execute	
 		
-			
-
-
-		
-
 
 if __name__ == "__main__": main()
