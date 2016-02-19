@@ -4,6 +4,7 @@
 import fileinput
 import db
 import readline
+import sys
 
 class MOD(object):
 	def __init__(self, name):
@@ -41,27 +42,29 @@ def main():
 	while True:
 		cmds = userInput(tree)
 		crossRef = crossReference(cmds)
-		#TESTING
-		for x in crossRef:
-			print "Subject: ", x.printNode()
-			for k in crossRef[x]:
-				print "Command: ", k.printNode()
-		#END TESTING
-		#CREATE EXECUTION HERE??
-		#
+		print "EXECUTION DICT: \n", crossRef
+
+		#CREATE EXECUTION HERE
 
 #
 # Recognize user input against DB Values
 #  
 def userInput(tree):
-	user_cmd = raw_input()
-	user_cmd = user_cmd.split(" ")
-	valid_cmds = []
-	for i in user_cmd:
+	user_input = raw_input()
+	user_input = user_input.split(" ")
+	print "USER COMMANDS"
+	print user_input
+	valid_input = []
+	for i in user_input:
 		found = tree.searchTree(i)
 		if found != None:
-			valid_cmds.append(found)
-	return valid_cmds
+			valid_input.append(found)
+	for i in valid_input:
+		print i
+	print "User Input-- Valid Input:"
+	print valid_input
+	print
+	return valid_input
 
 #
 # Match valid subjects with their commands
@@ -74,18 +77,20 @@ def crossReference(valid_input):
 	#Sort valid input into subj/cmd
 	for i in valid_input:
 		if i.typ == "SBJ":
-			cmds.append(i)
-		elif i.typ == "CMD":
 			subjs.append(i)
+		elif i.typ == "CMD":
+			cmds.append(i)
+	print "Cross Ref here"
+	print "Subs: ", subjs
+	print "Cmds: ", cmds
+	print
 	#Cross Reference
 	for x in subjs:
+		a = []
 		for j in cmds:
-			a = []
 			if j.module == x.module:
 				a.append(j)
 		execute[x] = a
-	
 	return execute	
 		
-
 if __name__ == "__main__": main()

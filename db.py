@@ -4,60 +4,68 @@ import difflib
 class ObjectNode(object):
 	def __init__(self, typ, module, value):
 		self.module = module
-		self.typ = typ
-		self.validarr = []	#We could maybe think of new way to create tree. IMO, right now an ObjectNode is carrying too much baggage for its purpose. Ideally, we want the Object node to hold a value for a certian subject or command, as well as its corresponding module. But right now, the objectNode is also carrying a large array of commands or subjects.If we remove the array from the object node and instead create an array of commands and subjects for a moduleNode, we wouldn't have to return a list of large objectNodes with large arrays in searchTree(). That way, each valid command that we find and use in the main will be much lighter. Let me know what you think.    
+		self.typ = typ    
 		self.valueStr = value
 
+	def __str__(self):
+        	return str(self.__dict__)	
 
-	def printNode(self):
-		print self.module
-		print self.typ
-		print "Value:", self.valueStr
+	def __eq__(self, other): 
+        	return self.__dict__ == other.__dict__
 
 class ModuleNode(object):
+	
 	def __init__(self, name):
 		self.name = name
-		self.commands = [] #Could change this into a list of Object nodes instead of each object node holding an array
+		#Lists of valid commands and subjects
+		self.commands = [] 
 		self.subjects = []
-		###### CHANGED #############
+	
 	def addCmd(self, cmd_add):
 		newN = ObjectNode("CMD", self.name, cmd_add)	
-		self.commands.append(newN) #replace addToArray with append 
-		######### CHANGED ################	
+		self.commands.append(newN)  	
+	
 	def addSbj(self, subject_add):
-		newN = ObjectNode("OBJ", self.name, subject_add)	
-		self.subjects.append(newN)#same here
-		########### CHANGED ###############
-	def search(self, string):
+		newN = ObjectNode("SBJ", self.name, subject_add)	
+		self.subjects.append(newN)
+	
+	## EVENTUALLY MAKE THIS FASTER ##
+	def search(self, string):					
 			for i in self.commands:
-				if i.valueStr == string:
+				print i
+				print difflib.SequenceMatcher(None, string, i.valueStr).ratio() #ERROR HERE WITH TEST hours vs hour. This call value is equal to .8 but when ran with the interpreter, the value equals .8888. 
+				if difflib.SequenceMatcher(None, i.valueStr, string).ratio() > .80:
 					return i
 			for j in self.subjects:
-				if j.valueStr == string:
+				if difflib.SequenceMatcher(None, j.valueStr, string).ratio() > .80:
 					return j
 
 	def printObjs(self):
 		for i in self.commands: 
 			print "--|-- CMD: --"
-			i.printNode()
+			print i
 		for x in self.subjects:
-			print "--|-- OBJ: --"
-			x.printNode()
+			print "--|-- SBJ: --"
+			print x
 
 class RootNode(object):
 	def __init__(self):
 		self.modules = []
 		
-	def addModule(self, moduleName, cmdarr, objarr):
+	def addModule(self, moduleName, cmdarr, sbjarr):
 		newMod = ModuleNode(moduleName)
+		print moduleName
+		print "Command array from config: ", cmdarr, "\n" 
 		for i in cmdarr:
 			newMod.addCmd(i)                       #Fills the module node's commands array 
-		for j in objarr:			
+		print moduleName
+		print "Sub array from config: ",sbjarr,"\n"
+		for j in sbjarr:			
 			newMod.addSbj(j)			#Fills the module node's obj array 		
 		self.modules.append(newMod)
 			
 	
-	def searchModule(self, moduleName): #Do we use this?   # not right now but im sure we will have to in the future....
+	def searchModule(self, moduleName): 
 		for i in self.modules:
 			if i.name == moduleName:
 				return i
@@ -70,7 +78,6 @@ class Tree(object):
 
 	def createTree(self, modulearr):
 		modulearr.sort(key = lambda x: x.name)
-		
 		for i in modulearr:
 			self.head.addModule(i.name, i.cmds, i.subjs)
 					
@@ -84,7 +91,7 @@ class Tree(object):
 		return found		
  
 	def printTree(self):
-		print "ROOT"
+		print "---ROOT---"
 		for i in self.head.modules:
-			print "|-", i.name
+			print "|-MODULE-", i.name
 			i.printObjs()

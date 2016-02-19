@@ -5,19 +5,22 @@ $open
 $rating
 $name
 #Subway
-#Tony's Bistro
-#Pizza Hut
+#QQ
+#Sonic
+#Culvers
 %Location
 $latitude
 $longitude
 $near me
 $where
-#latitude
-#logitude
+#I 
+#me
+#friends
 %Search
 $look
 $up
 $search
+#anything
 %Work
 %Reminders
 %Exit
