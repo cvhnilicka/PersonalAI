@@ -3,7 +3,7 @@
 #
 import fileinput
 import db
-import readline
+#import readline
 import Restaurant
 
 class MOD(object):
