@@ -4,7 +4,7 @@
 import fileinput
 import db
 import readline
-
+import Restaurant
 
 class MOD(object):
 	def __init__(self, name):
@@ -44,6 +44,13 @@ def main():
 		crossRef = crossReference(cmds)
 		print "EXECUTION DICT: \n", crossRef
 
+		for key in crossRef:
+			sub = key
+			cmds = crossRef[key]
+			for c in range(0, len(cmds)):
+				exe = cmds[c].valueStr + "()"
+				#sub.exe
+				print exe
 		#CREATE EXECUTION HERE
 
 #
