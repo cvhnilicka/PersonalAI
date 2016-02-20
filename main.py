@@ -4,7 +4,7 @@
 import fileinput
 import db
 import readline
-import sys
+
 
 class MOD(object):
 	def __init__(self, name):
