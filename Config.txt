@@ -25,3 +25,5 @@ $search
 %Reminders
 %Exit
 $exit
+%Weather
+#Weather
